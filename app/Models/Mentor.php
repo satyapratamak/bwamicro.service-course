@@ -9,6 +9,10 @@ class Mentor extends Model
 {
     use HasFactory;
     protected $table = 't_mentors';
+    protected $cast = [
+        'created_at' => 'datetime:Y-m-d H:m:s',
+        'updated_at' => 'datetime:Y-m-d H:m:s',
+    ];
     protected $fillable = [
         'name', 'profile', 'email', 'profession',
     ];
