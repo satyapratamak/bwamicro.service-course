@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\MentorController;
 use App\Http\Controllers\MentorController;
+use App\Http\Controllers\CourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,5 @@ Route::post('mentors', [MentorController::class, 'create']);
 Route::put('mentors/{id}', [MentorController::class, 'update']);
 Route::delete('mentors/{id}', [MentorController::class, 'destroy']);
 //Route::apiResource('mentors', MentorController::class);
+
+Route::post('courses', [CourseController::class, 'create']);

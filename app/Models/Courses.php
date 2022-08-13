@@ -15,6 +15,11 @@ class Courses extends Model
         'status', 'price', 'level', 'description', 't_mentors_id',
     ];
 
+    protected $cast = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
+
     public function mentor()
     {
         return $this->belongsTo('App\Models\Mentors');
