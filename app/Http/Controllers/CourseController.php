@@ -52,4 +52,59 @@ class CourseController extends Controller
             'data' => $course,
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'name' => 'string',
+            'is_certificate' => 'boolean',
+            'thumbnail' => 'string|url',
+            'type' => 'in:free,premium',
+            'status' => 'in:draft,published',
+            'price' => 'integer',
+            'level' => 'in:all-level,beginner,intermediate,advance',
+            't_mentors_id' => 'integer',
+            'description' => 'string',
+        ];
+
+        $data = $request->all();
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors(),
+            ], 400);
+        }
+
+        $course = Courses::find($id);
+        if (!$course) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'course not found',
+            ], 404);
+        }
+
+        $mentorId = $request->input('t_mentors_id');
+        if ($mentorId) {
+            // Mentor ID found in requests
+            $mentor = Mentor::find($mentorId);
+            if (!$mentor) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'mentor not found',
+                ], 404);
+            }
+        }
+
+        $course->fill($data);
+        $course->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Course was updated successfully',
+            'data' => $course,
+        ]);
+    }
 }
