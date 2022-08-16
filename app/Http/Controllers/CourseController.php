@@ -9,6 +9,26 @@ use App\Models\Mentor;
 
 class CourseController extends Controller
 {
+    public function index(Request $request)
+    {
+        $courses = Courses::query();
+
+        $q = $request->query('q');
+        $status = $request->query('status');
+
+        $courses->when($q, function ($query) use ($q) {
+            return $query->whereRaw("name LIKE '%" . strtolower($q) . "%'");
+        });
+
+        $courses->when($status, function ($query) use ($status) {
+            return $query->where("status", "=", $status);
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $courses->paginate(10),
+        ]);
+    }
     public function create(Request $request)
     {
         $rules = [
@@ -105,6 +125,25 @@ class CourseController extends Controller
             'status' => 'success',
             'message' => 'Course was updated successfully',
             'data' => $course,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $course = Courses::find($id);
+        if (!$course) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'course not found',
+            ], 404);
+        }
+
+        //Courses::destroy($id);
+        $course->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Course was deleted successfully',
+
         ]);
     }
 }
