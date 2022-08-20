@@ -13,6 +13,19 @@ class Review extends Model
         't_courses_id', 'user_id', 'ratings', 'note',
     ];
 
+    protected $date = ['updated_at', 'created_at'];
+    public function getCreatedAtAttribute($date)
+    {
+        //return  $date->format('Y-m-d H:i');
+        return date('Y-m-d H:i:s', strtotime($date));
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        //return $date->format('Y-m-d H:i');
+        return date('Y-m-d H:i:s', strtotime($date));
+    }
+
     public function courses()
     {
         return $this->belongsTo('App\Models\Course');

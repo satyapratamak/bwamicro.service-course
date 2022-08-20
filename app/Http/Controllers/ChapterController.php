@@ -10,6 +10,60 @@ use Illuminate\Support\Facades\Validator;
 
 class ChapterController extends Controller
 {
+    public function index(Request $request)
+    {
+        $chapters = Chapters::query();
+
+        $chapterId = $request->query('t_chapters_id');
+        $chapters->when($chapterId, function ($query) use ($chapterId) {
+            return $query->where("t_chapters_id", "=", $chapterId);
+        });
+
+        $name = $request->query('name');
+        $chapters->when($name, function ($query) use ($name) {
+            return $query->whereRaw("name LIKE '%" . strtolower($name) . "%'");
+        });
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $chapters->get(),
+        ]);
+    }
+
+    public function show($id)
+    {
+        $chapter = Chapters::find($id);
+        if (!$chapter) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'chapter not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $chapter,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $chapter = Chapters::find($id);
+        if (!$chapter) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'chapter not found',
+            ], 404);
+        }
+
+        $chapter->delete($id);
+        return response()->json([
+            'status' => 'success',
+            'message' => "chapter was deleted successfully",
+        ]);
+    }
+
     public function create(Request $request)
     {
         $rules = [
