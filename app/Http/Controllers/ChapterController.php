@@ -47,4 +47,62 @@ class ChapterController extends Controller
             'data' => $chapter,
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'name' => 'string',
+            't_courses_id' => 'integer',
+
+        ];
+
+        $data = $request->all();
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors(),
+            ], 400);
+        }
+
+        $chapter = Chapters::find($id);
+
+        if (!$chapter) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'chapter not found',
+            ], 404);
+        }
+
+        /* Chapter found in database */
+
+        // Check t_courses_id
+
+        $courseId = $request->input('t_courses_id');
+
+        if ($courseId) {
+            $course = Courses::find($courseId);
+
+            if (!$course) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'course not found',
+                ], 404);
+            }
+        }
+
+
+
+
+        $chapter->fill($data);
+
+        $chapter->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'chapter was updated successfully',
+            'data' => $chapter,
+        ]);
+    }
 }

@@ -15,6 +15,8 @@ class Courses extends Model
         'status', 'price', 'level', 'description', 't_mentors_id',
     ];
 
+    protected $date = ['updated_at', 'created_at'];
+
     protected $cast = [
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
@@ -33,5 +35,17 @@ class Courses extends Model
     public function images()
     {
         return $this->hasMany('App\Models\ImageCourses')->orderBy('id', 'DESC');
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+        //return  $date->format('Y-m-d H:i');
+        return date('Y-m-d H:i:s', strtotime($date));
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        //return $date->format('Y-m-d H:i');
+        return date('Y-m-d H:i:s', strtotime($date));
     }
 }
