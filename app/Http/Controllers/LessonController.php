@@ -132,4 +132,23 @@ class LessonController extends Controller
             'data' => $lesson,
         ]);
     }
+
+    public function destroy($id)
+    {
+        $lesson = Lessons::find($id);
+        if (!$lesson) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'lesson not found',
+            ], 404);
+        }
+
+        //Courses::destroy($id);
+        $lesson->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Lesson was deleted successfully',
+
+        ]);
+    }
 }
