@@ -14,9 +14,9 @@ class ChapterController extends Controller
     {
         $chapters = Chapters::query();
 
-        $chapterId = $request->query('t_chapters_id');
-        $chapters->when($chapterId, function ($query) use ($chapterId) {
-            return $query->where("t_chapters_id", "=", $chapterId);
+        $coursesId = $request->query('t_courses_id');
+        $chapters->when($coursesId, function ($query) use ($coursesId) {
+            return $query->where("t_courses_id", "=", $coursesId);
         });
 
         $name = $request->query('name');
