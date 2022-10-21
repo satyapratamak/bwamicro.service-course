@@ -15,7 +15,7 @@ class MyCourse extends Model
 
     public function courses()
     {
-        return $this->belongsTo('App\Models\Course');
+        return $this->belongsTo('App\Models\Courses', 't_courses_id');
     }
 
     protected $date = ['updated_at', 'created_at'];

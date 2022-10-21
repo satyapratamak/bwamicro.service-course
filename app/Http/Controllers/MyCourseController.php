@@ -12,7 +12,7 @@ class MyCourseController extends Controller
 
     public function index(Request $request)
     {
-        $myCourses = MyCourse::query();
+        $myCourses = MyCourse::query()->with('courses');
 
         $userID = $request->query('user_id');
 
